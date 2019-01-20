@@ -58,3 +58,15 @@ add_action(
 		}
 	}
 );
+
+/**
+ * Get the production URL.
+ *
+ * @return string Production URL from site options.
+ */
+function production_url() {
+	$url = get_option( OPT_PROD_URL );
+
+	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+	return base64_decode( $url );
+}

@@ -22,7 +22,7 @@ namespace SafeStaging;
 						type="url"
 						class="regular-text code"
 						name="<?php echo esc_attr( OPT_PROD_URL ); ?>"
-						value="<?php echo esc_attr( get_option( OPT_PROD_URL ) ); ?>"
+						value="<?php echo esc_attr( production_url() ); ?>"
 					>
 				</td>
 			</tr>

@@ -32,7 +32,7 @@ class Fake_PHPMailer extends \PHPMailer {
 	 * @since 0.8.0
 	 * @return bool
 	 */
-	function send() {
+	public function send() {
 		try {
 			if ( ! $this->preSend() ) {
 				return false;

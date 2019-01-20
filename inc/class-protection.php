@@ -41,7 +41,7 @@ class Protection {
 	 * @return boolean True if the site is the production site.
 	 */
 	public static function is_production() {
-		$prod_url = get_option( OPT_PROD_URL, '' );
+		$prod_url = production_url();
 		$curr_url = site_url();
 		$rgx      = '/https?\:\/\/(?:www\.)?/';
 

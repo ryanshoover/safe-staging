@@ -28,7 +28,7 @@ class Notices {
 	 * Render any admin notices.
 	 */
 	public function do_admin_notices() {
-		$prod_url           = get_option( OPT_PROD_URL );
+		$prod_url           = production_url();
 		$is_setup_dismissed = get_user_meta( get_current_user_id(), SLUG . '_notice_setup_dismiss' );
 
 		if ( empty( $prod_url ) && empty( $is_setup_dismissed ) ) {
@@ -62,7 +62,7 @@ class Notices {
 		$notice = sprintf(
 			'%s <a href="%s">%s</a>',
 			__( 'This is a staging site. Please make all purchases at the', 'safe-staging' ),
-			get_option( OPT_PROD_URL ),
+			production_url(),
 			__( 'production site', 'safe-staging' )
 		);
 

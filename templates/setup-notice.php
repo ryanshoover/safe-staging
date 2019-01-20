@@ -10,7 +10,7 @@ namespace SafeStaging;
 ?>
 <div class="notice notice-safe-staging-setup notice-info is-dismissible">
 	<p>
-		<?php _e( 'Configure Safe Staging to protect your staging sites from accidental emails and orders.', 'safe-staging' ); ?>
+		<?php esc_html_e( 'Configure Safe Staging to protect your staging sites from accidental emails and orders.', 'safe-staging' ); ?>
 		&nbsp;&nbsp;
 		<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'options-general.php?page=' . SLUG ) ); ?>">Configure</a>
 	</p>

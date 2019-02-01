@@ -4,17 +4,17 @@
  *
  * @package     safe-staging
  * @author      ryanshoover
- * @license     Proprietary
+ * @license     GPL3
  *
  * @wordpress-plugin
  * Plugin Name: Safe Staging
- * Plugin URI:  https://hoover.ws
+ * Plugin URI:  https://github.com/ryanshoover/safe-staging
  * Description: Disables user activities on a staging site
  * Version:     0.1.0
  * Author:      ryanshoover
  * Author URI:  https://ryan.hoover.ws
  * Text Domain: safe-staging
- * License:     GPL2
+ * License:     GPL3
  */
 
 namespace SafeStaging;
@@ -28,15 +28,11 @@ function autoload ( $class ) {
 	if ( strncmp( __NAMESPACE__, $class, strlen( __NAMESPACE__ ) ) !== 0 ) {
 		return;
 	}
-	$file_name           = str_replace( [ '\\', '_' ], [ '/', '-' ], strtolower( substr( $class, strlen( __NAMESPACE__ ) + 1 ) ) ) . '.php';
-	$class_file_name     = preg_replace( '/([\w-]+)\.php/', 'class-$1.php', $file_name );
-	$interface_file_name = preg_replace( '/([\w-]+)\.php/', 'interface-$1.php', $file_name );
-	$class_file          = __DIR__ . '/inc/' . $class_file_name;
-	$interface_file      = __DIR__ . '/inc/' . $interface_file_name;
-	if ( file_exists( $class_file ) ) {
-		require_once $class_file;
-	} elseif ( file_exists( $interface_file ) ) {
-		require_once $interface_file;
+	$file_name = str_replace( [ '\\', '_' ], [ '/', '-' ], strtolower( substr( $class, strlen( __NAMESPACE__ ) + 1 ) ) ) . '.php';
+	$file_name = preg_replace( '/([\w-]+)\.php/', 'class-$1.php', $file_name );
+	$file      = __DIR__ . '/inc/' . $file_name;
+	if ( realpath( $file ) === $file && file_exists( $file ) ) {
+		require_once $file;
 	}
 }
 
@@ -61,6 +57,8 @@ add_action(
 
 /**
  * Get the production URL.
+ *
+ * Returns the production URL from the site option after decoding.
  *
  * @return string Production URL from site options.
  */

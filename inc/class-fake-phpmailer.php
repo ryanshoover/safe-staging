@@ -23,6 +23,23 @@ require_once ABSPATH . WPINC . '/class-phpmailer.php';
 class Fake_PHPMailer extends \PHPMailer {
 
 	/**
+	 * Determine if the email is a whitelisted one.
+	 *
+	 * Only some emails from WordPress should actually be sent.
+	 * Check if the current is email is one of those.
+	 *
+	 * @return bool Should we send the email.
+	 */
+	protected function is_whitelist_email() {
+		// Is this the Lost Password email?
+		if ( did_action( 'lostpassword_post' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Replacement send() method that does not send.
 	 *
 	 * Unlike the PHPMailer send method,
@@ -34,12 +51,19 @@ class Fake_PHPMailer extends \PHPMailer {
 	 */
 	public function send() {
 		try {
+			// If this email is whitelisted, send it.
+			if ( $this->is_whitelist_email() ) {
+				return parent::send();
+			}
+
+			// If preSend failed, fail this function.
 			if ( ! $this->preSend() ) {
 				return false;
 			}
 
+			// Claim we sent the email.
 			return true;
-		} catch ( \phpmailerException $e ) {
+		} catch (phpmailerException $exc) {
 			return false;
 		}
 	}

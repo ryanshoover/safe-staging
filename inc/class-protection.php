@@ -59,7 +59,7 @@ class Protection {
 	/**
 	 * Replace WordPress's PHPMailer with our fake version.
 	 *
-	 * @uses object $phpmailer PHPMailer class.
+	 * @global object $phpmailer PHPMailer class.
 	 */
 	protected function replace_mailer() {
 		global $phpmailer;

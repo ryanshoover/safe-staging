@@ -66,5 +66,7 @@ function production_url() {
 	$url = get_option( OPT_PROD_URL );
 
 	// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
-	return base64_decode( $url );
+	$url = base64_decode( $url );
+
+	return apply_filters( 'safe_staging_production_url', $url );
 }

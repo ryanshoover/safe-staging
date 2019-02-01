@@ -41,6 +41,7 @@ class Protection {
 	 * @return boolean True if the site is the production site.
 	 */
 	public static function is_production() {
+		$is_prod  = false;
 		$prod_url = production_url();
 		$curr_url = site_url();
 		$rgx      = '/https?\:\/\/(?:www\.)?/';
@@ -50,10 +51,10 @@ class Protection {
 
 		// Test if we don't have a prod url or if we're on the production site
 		if ( empty( $prod_url ) || $prod_url === $curr_url ) {
-			return true;
+			$is_prod = true;
 		}
 
-		return false;
+		return apply_filters( 'safe_staging_is_production', $is_prod );
 	}
 
 	/**

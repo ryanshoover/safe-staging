@@ -31,12 +31,14 @@ class Fake_PHPMailer extends \PHPMailer {
 	 * @return bool Should we send the email.
 	 */
 	protected function is_whitelist_email() {
+		$whitelisted = false;
+
 		// Is this the Lost Password email?
 		if ( did_action( 'lostpassword_post' ) ) {
-			return true;
+			$whitelisted = true;
 		}
 
-		return false;
+		return apply_filters( 'safe_staging_is_whitelist_email', $whitelisted, $this );
 	}
 
 	/**

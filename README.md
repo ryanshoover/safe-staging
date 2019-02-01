@@ -22,7 +22,7 @@ Instead, install this plugin in production, set the production URL, and safely c
 
 ### Features on Staging
 
-WordPress Emails are stopped. The site won\'t send any emails (may not be compatible with plugins that offload mail to a 3rd party service).
+WordPress emails are stopped. The site won't send any emails except for the password reset email. Please note, this feature may not be compatible with plugins that offload email to a 3rd party service.
 
 The WooCommerce checkout page has a warning message notifying the visitor they are viewing the staging site.
 

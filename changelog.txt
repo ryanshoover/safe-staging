@@ -1,0 +1,4 @@
+== Changelog ==
+
+= 0.2 =
+* Adds noindex tag to the staging site.

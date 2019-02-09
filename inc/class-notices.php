@@ -66,6 +66,12 @@ class Notices {
 			__( 'production site', 'safe-staging' )
 		);
 
-		wc_add_notice( $notice, 'error' );
+		/**
+		 * Change the warning message that gets displayed on the checkout page
+		 * of staging sites.
+		 *
+		 * @param string $notice HTML of the message to be shown.
+		 */
+		wc_add_notice( apply_filters( 'safe_staging_checkout_notice', $notice ), 'error' );
 	}
 }

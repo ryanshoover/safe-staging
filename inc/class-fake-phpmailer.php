@@ -38,6 +38,12 @@ class Fake_PHPMailer extends \PHPMailer {
 			$whitelisted = true;
 		}
 
+		/**
+		 * Determine whether the email should be sent.
+		 *
+		 * @param bool   $whitelisted Should the email actually send.
+		 * @param object $this        Instance of the Fake PHPMailer class.
+		 */
 		return apply_filters( 'safe_staging_is_whitelist_email', $whitelisted, $this );
 	}
 

@@ -25,6 +25,9 @@ class Protection {
 		// Stop all emails.
 		$self->replace_mailer();
 
+		// Add a noindex tag to the header to stop indexing bots.
+		add_action( 'wp_head', 'wp_no_robots' );
+
 		// Remove all but most basic payment gateways.
 		add_filter( 'woocommerce_payment_gateways', [ $self, 'disable_payment_gateways' ], 999999 );
 
@@ -54,6 +57,12 @@ class Protection {
 			$is_prod = true;
 		}
 
+		/**
+		 * Change whether Safe Staging thinks the current site
+		 * is the production site.
+		 *
+		 * @param bool $is_prod Is this the production site.
+		 */
 		return apply_filters( 'safe_staging_is_production', $is_prod );
 	}
 

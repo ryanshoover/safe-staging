@@ -52,28 +52,34 @@ jobs:
                 name: Checkout SVN version of plugin
                 command: |
                     mkdir -p ~/wordpress-svn
-                    svn checkout --username $WP_USER --password --non-interactive $WP_PASS https://plugins.svn.wordpress.org/$PLUGIN_SLUG ~/wordpress-svn
+                    svn checkout --non-interactive https://plugins.svn.wordpress.org/$PLUGIN_SLUG ~/wordpress-svn
 
             - run:
                 name: Add new plugin code in place of old
                 command: |
                     rm -rf ~/wordpress-svn/trunk/{,.[!.],..?}*
-                    cp -R $CIRCLE_WORKING_DIRECTORY ~/wordpress-svn/trunk/
+                    cp -R . ~/wordpress-svn/trunk/
                     rm -rf ~/wordpress-svn/trunk/.circleci ~/wordpress-svn/trunk/.git*
 
             - run:
                 name: Check code into SVN
                 command: |
                     cd ~/wordpress-svn/trunk/
-                    svn status | grep ^! | awk '{print " --force "$2}' | xargs svn delete
-                    svn propset svn:ignore -F .svnignore .
+                    if $( svn status | grep ^! ); then
+                        svn status | grep ^! | awk '{print " --force "$2}' | xargs svn delete
+                    fi
+                    if [ -f .svnignore ]; then
+                        svn propset svn:ignore -F .svnignore .
+                    fi
                     svn add --force .
 
             - deploy:
                 command: |
                     cd ~/wordpress-svn
-                    svn copy trunk tags/$CIRCLE_TAG;
-                    # svn commit --username $WP_USER --password --non-interactive --message "Tagging $CIRCLE_TAG";
+                    if [[ $CIRCLE_TAG ]]; then
+                        svn copy trunk tags/$CIRCLE_TAG;
+                        svn commit --username $WP_USER --password $WP_PASS --non-interactive --message "Tagging $CIRCLE_TAG";
+                    fi
 
 workflows:
     version: 2
@@ -87,5 +93,5 @@ workflows:
                             - /.*dev.*/
                             - /.*alpha.*/
                             - /.*beta.*/
-                    # branches:
-                        # ignore: /.*/
+                    branches:
+                        ignore: /.*/

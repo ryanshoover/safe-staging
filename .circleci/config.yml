@@ -42,7 +42,7 @@ jobs:
 
             - run:
                 name: Set up plugin slug
-                command:
+                command: |
                     echo '[[ $PLUGIN_SLUG ]] && \
                     export PLUGIN_SLUG=$PLUGIN_SLUG || \
                     export PLUGIN_SLUG=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
@@ -51,7 +51,7 @@ jobs:
                 name: Checkout SVN version of plugin
                 command: |
                     mkdir -p ~/wordpress-svn
-                    svn checkout https://plugins.svn.wordpress.org/$PLUGIN_SLUG ~/wordpress-svn
+                    svn checkout --username $WP_USER --password --non-interactive $WP_PASS https://plugins.svn.wordpress.org/$PLUGIN_SLUG ~/wordpress-svn
 
             - run:
                 name: Add new plugin code in place of old
@@ -68,10 +68,11 @@ jobs:
                     svn propset svn:ignore -F .svnignore .
                     svn add --force .
 
-            - deploy: |
+            - deploy:
+                command: |
                     cd ~/wordpress-svn
                     svn copy trunk tags/$CIRCLE_TAG;
-                    svn commit -m "Tagging $CIRCLE_TAG";
+                    # svn commit --username $WP_USER --password --non-interactive --message "Tagging $CIRCLE_TAG";
 
 workflows:
     version: 2

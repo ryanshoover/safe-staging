@@ -3,7 +3,7 @@ version: 2.1
 jobs:
     build_deploy:
         docker:
-            - image: circleci/php:7.3-apache-node-browsers
+            - image: circleci/php:7-fpm-node
 
         steps:
             - checkout
@@ -57,7 +57,7 @@ jobs:
             - run:
                 name: Add new plugin code in place of old
                 command: |
-                    rm -rf ~/wordpress-svn/trunk/* ~/wordpress-svn/trunk/.* ~/wordpress-svn/trunk/*.*
+                    rm -rf ~/wordpress-svn/trunk/{,.[!.],..?}*
                     cp -R $CIRCLE_WORKING_DIRECTORY/* ~/wordpress-svn/trunk/
                     rm -rf ~/wordpress-svn/trunk/.circleci ~/wordpress-svn/trunk/.git*
 

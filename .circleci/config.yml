@@ -7,7 +7,7 @@ jobs:
 
         steps:
             - checkout
-            - run: apt-get update && apt-get install subversion
+            - run: sudo apt-get update && sudo apt-get install subversion
 
             - restore_cache:
                 keys:

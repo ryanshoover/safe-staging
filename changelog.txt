@@ -1,4 +1,8 @@
 == Changelog ==
 
+= 0.2.1 =
+* Bumps compatibility to 5.1.
+* Adds uninstall file.
+
 = 0.2 =
 * Adds noindex tag to the staging site.

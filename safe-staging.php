@@ -10,7 +10,7 @@
  * Plugin Name: Safe Staging
  * Plugin URI:  https://github.com/ryanshoover/safe-staging
  * Description: Disables user activities on a staging site
- * Version:     0.2.0
+ * Version:     0.2.1
  * Author:      ryanshoover
  * Author URI:  https://ryan.hoover.ws
  * Text Domain: safe-staging

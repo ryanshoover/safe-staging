@@ -1,0 +1,89 @@
+version: 2.1
+
+jobs:
+    build_deploy:
+        docker:
+            - image: circleci/php:7.3-apache-node-browsers
+
+        steps:
+            - checkout
+
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "readme.txt" }}
+                    - v1-dependencies-
+
+            - run:
+                name:    Install composer
+                command: |
+                    if [ -f ./composer.json ]; then
+                        composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+                    fi
+
+            - run:
+                name: Install yarn
+                command: |
+                    if [ -f ./package.json ]; then
+                        yarn install --production --non-interactive --emoji false
+                    fi
+
+            - save_cache:
+                key: v1-dependencies-{{ checksum "readme.txt" }}
+                paths:
+                    - node_modules
+                    - vendor
+
+            - run:
+                name: Run yarn run build
+                command: |
+                    if yarn run --non-interactive | grep -e "- build"; then
+                        yarn run build
+                    fi
+
+            - run:
+                name: Set up plugin slug
+                command:
+                    echo '[[ $PLUGIN_SLUG ]] && \
+                    export PLUGIN_SLUG=$PLUGIN_SLUG || \
+                    export PLUGIN_SLUG=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
+
+            - run:
+                name: Checkout SVN version of plugin
+                command: |
+                    mkdir -p ~/wordpress-svn
+                    svn checkout https://plugins.svn.wordpress.org/$PLUGIN_SLUG ~/wordpress-svn
+
+            - run:
+                name: Add new plugin code in place of old
+                command: |
+                    rm -rf ~/wordpress-svn/trunk/* ~/wordpress-svn/trunk/.* ~/wordpress-svn/trunk/*.*
+                    cp -R $CIRCLE_WORKING_DIRECTORY/* ~/wordpress-svn/trunk/
+                    rm -rf ~/wordpress-svn/trunk/.circleci ~/wordpress-svn/trunk/.git*
+
+            - run:
+                name: Check code into SVN
+                command: |
+                    cd ~/wordpress-svn/trunk/
+                    svn status | grep ^! | awk '{print " --force "$2}' | xargs svn delete
+                    svn propset svn:ignore -F .svnignore .
+                    svn add --force .
+
+            - deploy: |
+                    cd ~/wordpress-svn
+                    svn copy trunk tags/$CIRCLE_TAG;
+                    svn commit -m "Tagging $CIRCLE_TAG";
+
+workflows:
+    version: 2
+    deploy:
+        jobs:
+            - build_deploy:
+                filters:
+                    tags:
+                        ignore:
+                            - /.*pre.*/
+                            - /.*dev.*/
+                            - /.*alpha.*/
+                            - /.*beta.*/
+                    branches:
+                        ignore: /.*/

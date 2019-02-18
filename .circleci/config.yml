@@ -72,6 +72,7 @@ jobs:
                         svn propset svn:ignore -F .svnignore .
                     fi
                     svn add --force .
+                    svn status
 
             - deploy:
                 command: |
@@ -86,6 +87,7 @@ workflows:
     deploy:
         jobs:
             - build_deploy:
+                context: wordpress-svn
                 filters:
                     tags:
                         ignore:

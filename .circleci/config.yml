@@ -58,7 +58,7 @@ jobs:
                 name: Add new plugin code in place of old
                 command: |
                     rm -rf ~/wordpress-svn/trunk/{,.[!.],..?}*
-                    cp -R $CIRCLE_WORKING_DIRECTORY/* ~/wordpress-svn/trunk/
+                    cp -R $CIRCLE_WORKING_DIRECTORY ~/wordpress-svn/trunk/
                     rm -rf ~/wordpress-svn/trunk/.circleci ~/wordpress-svn/trunk/.git*
 
             - run:

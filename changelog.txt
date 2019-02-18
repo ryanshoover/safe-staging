@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 0.2.3 =
+* Adds support for CI / CD code management
+
 = 0.2.1 =
 * Bumps compatibility to 5.1.
 * Adds uninstall file.

@@ -87,4 +87,4 @@ workflows:
                             - /.*alpha.*/
                             - /.*beta.*/
                     branches:
-                        ignore: /.*/
+                        # ignore: /.*/

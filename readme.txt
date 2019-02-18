@@ -10,6 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 Safely copy your WordPress, WooCommerce, and membership site between production and staging.
 
 == Description ==
+
 Simply define your production url in settings and copy your site to your staging instance without fear. The staging site won't send any emails and won't process any payments.
 
 = Why should I use the plugin =

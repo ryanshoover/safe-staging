@@ -12,6 +12,8 @@ Safely copy your WordPress, WooCommerce, and membership site between production 
 
 == Description ==
 
+[![CircleCI](https://circleci.com/gh/ryanshoover/safe-staging/tree/master.svg?style=svg)](https://circleci.com/gh/ryanshoover/safe-staging/tree/master)
+
 Simply define your production url in settings and copy your site to your staging instance without fear. The staging site won't send any emails and won't process any payments.
 
 = Why should I use the plugin =

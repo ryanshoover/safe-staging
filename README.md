@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ryanshoover/safe-staging/tree/master.svg?style=svg)](https://circleci.com/gh/ryanshoover/safe-staging/tree/master)
+
 # Safe Staging
 
 * Contributors: ryanshoover
@@ -38,7 +40,12 @@ WooCommerce Subscriptions is put into staging mode.
 2. Activate the plugin at `/wp-admin/plugins.php`
 3. Set the URL for your production site at `/wp-admin/options-general.php?page=safe-staging`
 
-## Hooks and Filters
+## Frequently Asked Questions
+
+### Can I complicate how the plugin determines what the production URL is?
+
+The filter `safe_staging_is_production` will let you change what the plugin sees as the production site.
+For example, the filter below will let you support an alternative production URL.
 
 ```php
 /**
@@ -46,26 +53,89 @@ WooCommerce Subscriptions is put into staging mode.
  * is the production site.
  *
  * @param bool $is_prod Is this the production site.
+ * @return bool         Whether we should treat this as an alternative production site.
  */
-apply_filters( 'safe_staging_is_production', $is_prod );
+add_filter(
+    'safe_staging_is_production',
+    function( $is_prod ) {
+        $alternative_prod_url = 'https://myothersite.com';
+
+        if ( site_url() === $alternative_prod_url ) {
+            $is_prod = true;
+        }
+
+        return $is_prod;
+    }
+);
 ```
+
+= Can I let other emails get sent on staging sites? =
+
+The filter `safe_staging_is_whitelist_email` will let you intervene just before an email is blocked.
+For example, the filter below will let you support an alternative production URL.
 
 ```php
 /**
  * Determine whether a particular email should be sent.
  *
+ * In this case we test if the to recipient is our admin address.
+ *
  * @param bool   $whitelisted Should the email actually send.
  * @param object $this        Instance of the Fake PHPMailer class.
+ * @return bool               Whitelist value tested against the recipient.
  */
-apply_filters( 'safe_staging_is_whitelist_email', $whitelisted, $this );
+add_filter(
+    'safe_staging_is_whitelist_email'
+    function( $whitelisted, $phpmailer ) {
+        if ( 'admin@mysite.com' === $phpmailer->getToAddresses() ) {
+            $whitelisted = true;
+        }
+
+        return $whitelisted;
+    },
+    10,
+    2
+);
 ```
+
+= Can I change the message that shows on the checkout page? =
+
+The filter `safe_staging_checkout_notice` will let you override the message shown on the cart and checkout pages.
 
 ```php
 /**
  * Change the warning message that gets displayed on the checkout page
  * of staging sites.
  *
- * @param string $notice HTML of the message to be shown.
+ * @return string New message to show on the checkout page.
  */
-apply_filters( 'safe_staging_checkout_notice', $notice );
+add_filter(
+    'safe_staging_checkout_notice',
+    function() {
+        return 'You\'ve found our staging site! You might want to go back to the production site.';
+    }
+)
 ```
+
+== Upgrade notice ==
+
+None needed.
+
+== Changelog ==
+
+= 0.2.4 =
+
+* Clarifies readme code examples
+
+= 0.2.3 =
+
+* Adds support for CI / CD code management
+
+= 0.2.1 =
+
+* Bumps compatibility to 5.1.
+* Adds uninstall file.
+
+= 0.2 =
+
+* Adds noindex tag to the staging site.

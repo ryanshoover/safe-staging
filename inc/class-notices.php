@@ -28,15 +28,23 @@ class Notices {
 	 * Render any admin notices.
 	 */
 	public function do_admin_notices() {
+		$screen             = get_current_screen();
 		$prod_url           = production_url();
 		$is_setup_dismissed = get_user_meta( get_current_user_id(), SLUG . '_notice_setup_dismiss' );
 
-		if ( empty( $prod_url ) && empty( $is_setup_dismissed ) ) {
-			include PATH . 'templates/setup-notice.php';
+		if ( empty( $prod_url ) && empty( $is_setup_dismissed ) && 'settings_page_safe-staging' !== $screen->id ) {
+			include PATH . 'templates/notice-setup.php';
+			return;
 		}
 
 		if ( ! Protection::is_production() ) {
-			include PATH . 'templates/staging-notice.php';
+			include PATH . 'templates/notice-staging.php';
+			return;
+		}
+
+		if ( Protection::is_production() ) {
+			include PATH . 'templates/notice-production.php';
+			return;
 		}
 	}
 

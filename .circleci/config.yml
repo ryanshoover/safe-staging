@@ -41,7 +41,7 @@ jobs:
             - store_test_results:
                 path:         tests/_output
 
-    build_deploy:
+    deploy:
         docker:
             - image: circleci/php:7-fpm-node
 
@@ -124,10 +124,12 @@ jobs:
 
 workflows:
     version: 2
-    test-deploy:
+    test:
         jobs:
             - test
-            - build_deploy:
+    deploy:
+        jobs:
+            - deploy:
                 context: wordpress-svn
                 requires:
                     - test

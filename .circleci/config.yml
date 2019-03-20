@@ -34,7 +34,7 @@ jobs:
 
             # Run the test scripts
             - run:
-                name:         Run Codeception acceptance tests.
+                name:         Run Codeception tests.
                 command:      codecept run --xml="results.xml"
 
             # Open up our test results to CircleCI

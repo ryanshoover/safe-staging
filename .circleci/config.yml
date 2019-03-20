@@ -131,8 +131,6 @@ workflows:
         jobs:
             - deploy:
                 context: wordpress-svn
-                requires:
-                    - test
                 filters:
                     tags:
                         only: /[\d\.]*/

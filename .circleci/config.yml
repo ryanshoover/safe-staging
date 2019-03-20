@@ -99,7 +99,7 @@ jobs:
                 command: |
                     rm -rf ~/wordpress-svn/trunk/{,.[!.],..?}*
                     cp -R . ~/wordpress-svn/trunk/
-                    rm -rf ~/wordpress-svn/trunk/.circleci ~/wordpress-svn/trunk/.git*
+                    rm -rf ~/wordpress-svn/trunk/.circleci ~/wordpress-svn/trunk/.git* ~/wordpress-svn/trunk/tests
 
             - run:
                 name: Check code into SVN

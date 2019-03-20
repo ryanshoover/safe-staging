@@ -1,0 +1,16 @@
+{
+    "name": "ryanshoover/safe-staging",
+    "description": "WordPress plugin to prevent user actions on staging sites.",
+    "type": "wordpress-plugin",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Ryan Hoover",
+            "email": "ryanshoover@gmail.com"
+        }
+    ],
+    "require": {},
+    "scripts": {
+        "test": "docker-compose --file ./tests/_docker/docker-compose.yml run wpbrowser"
+    }
+}

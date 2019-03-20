@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+    db:
+        image:                   mysql:5.7
+        restart:                 always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE:      wordpress
+            MYSQL_USER:          wordpress
+            MYSQL_PASSWORD:      wordpress
+
+    wpbrowser:
+        build:                   ~/code/docker-wp-browser
+        # image:                   ryanshoover/wp-browser:latest
+        links:
+            - db:mysql
+        volumes:
+            - ../..:/var/www/html/wp-content/plugins/safe-staging
+            - ..:/var/www/html/tests
+        command:                 codecept run
+        environment:
+            DB_HOST:             db
+            DB_NAME:             wordpress
+            DB_USER:             wordpress
+            DB_PASSWORD:         wordpress

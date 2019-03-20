@@ -1,0 +1,21 @@
+# Codeception Test Suite Configuration
+#
+# Suite for unit or integration tests that require WordPress functions and classes.
+
+actor: WpunitTester
+modules:
+    enabled:
+        - WPLoader
+        - \Helper\Wpunit
+    config:
+        WPLoader:
+            wpRootFolder: "%WP_ROOT_FOLDER%"
+            dbName: "%DB_NAME%"
+            dbHost: "%DB_HOST%"
+            dbUser: "%DB_USER%"
+            dbPassword: "%DB_PASSWORD%"
+            tablePrefix: "%WP_TABLE_PREFIX%"
+            domain: "%WP_DOMAIN%"
+            adminEmail: "%ADMIN_EMAIL%"
+            title: "Safe Staging"
+            plugins: ['safe-staging/safe-staging.php']

@@ -24,6 +24,6 @@ modules:
             tablePrefix:         '%WP_TABLE_PREFIX%'
         WordPress:
             depends:             WPDb
-            wpRootFolder:        '.'
+            wpRootFolder:        '%WP_ROOT_FOLDER%'
             adminUsername:       '%ADMIN_USERNAME%'
             adminPassword:       '%ADMIN_PASSWORD%'

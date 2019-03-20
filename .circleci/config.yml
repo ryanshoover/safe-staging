@@ -1,6 +1,46 @@
-version: 2.1
+version: 2
 
 jobs:
+    test:
+        working_directory: /var/www/html/wp-content/plugins/safe-staging
+        docker:
+            # TODO: Switch to tagged version when stable
+            - image:          ryanshoover/wp-browser:latest
+              name:           wp-browser
+              environment:
+                DB_USER:      wordpress
+                DB_PASSWORD:  wordpress
+                DB_NAME:      wordpress
+                DB_HOST:      db
+
+            - image:          circleci/mysql:5
+              name:           db
+              environment:
+                MYSQL_ROOT_PASSWORD: password
+                MYSQL_DATABASE:      wordpress
+                MYSQL_USER:          wordpress
+                MYSQL_PASSWORD:      wordpress
+        steps:
+            - checkout
+
+            - run:
+                name:         Make sure WordPress is loaded.
+                command:      /entrypoint.sh
+
+            - run:
+                name:         Link tests to site root
+                command:      |
+                    ln -s tests /var/www/html/tests
+
+            # Run the test scripts
+            - run:
+                name:         Run Codeception acceptance tests.
+                command:      codecept run --xml="results.xml"
+
+            # Open up our test results to CircleCI
+            - store_test_results:
+                path:         tests/_output
+
     build_deploy:
         docker:
             - image: circleci/php:7-fpm-node
@@ -84,10 +124,17 @@ jobs:
 
 workflows:
     version: 2
+    test:
+        jobs:
+            - test
+
     deploy:
         jobs:
+            - test
             - build_deploy:
                 context: wordpress-svn
+                requires:
+                    - test
                 filters:
                     tags:
                         ignore:

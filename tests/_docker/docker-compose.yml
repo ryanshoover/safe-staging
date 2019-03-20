@@ -12,11 +12,12 @@ services:
             MYSQL_PASSWORD:      wordpress
 
     wpbrowser:
-        image:                   ryanshoover/wp-browser:latest
+        build:                   ~/code/docker-wp-browser
+        # image:                   ryanshoover/wp-browser:latest
         links:
             - db:mysql
         volumes:
-            - ../..:/var/www/html/wp-content/plugins/wpengine-affiliate-cobranding
+            - ../..:/var/www/html/wp-content/plugins/safe-staging
             - ..:/var/www/html/tests
         command:                 codecept run
         environment:

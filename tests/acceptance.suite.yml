@@ -24,7 +24,7 @@ modules:
             tablePrefix:    '%WP_TABLE_PREFIX%'
         WPBrowser:
             url:            '%WP_URL%'
-            wpRootFolder:   '.'
+            wpRootFolder:   '%WP_ROOT_FOLDER%'
             adminPath:      '/wp-admin'
             adminUsername:  '%ADMIN_USERNAME%'
             adminPassword:  '%ADMIN_PASSWORD%'

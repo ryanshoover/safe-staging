@@ -3,3 +3,6 @@ node_modules
 
 *.log
 .DS_Store
+
+# Codecept test output
+tests/_output

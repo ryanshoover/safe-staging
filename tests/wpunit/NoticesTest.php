@@ -10,7 +10,7 @@
  *
  * @return boolean true. always true.
  */
-function WC() {
+function WC() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	return true;
 }
 
@@ -27,7 +27,6 @@ function is_cart() {
  * Mock WooCommerce's functions.
  *
  * @param string $notice The standard notice to show.
- * @return string Common string from plugin.
  */
 function wc_add_notice( $notice) {
 	echo wp_kses_post( $notice );
@@ -55,21 +54,18 @@ class NoticesTest extends \Codeception\TestCase\WPTestCase {
 		$this->notices->do_admin_notices();
 		$result = ob_get_clean();
 
-		$this->assertContains(
-			'Configure Safe Staging to protect your staging sites from accidental emails and orders.',
-			$result
-		);
+		$this->testAdminNotice( 'Configure Safe Staging to protect your staging sites from accidental emails and orders.' );
 	}
 
 	/**
 	 * Test our admin staging notice.
 	 */
 	public function testAdminStagingNotice() {
-		// Filter the production URL value.
+		// Filter the production URL.
 		add_filter(
 			'safe_staging_production_url',
 			function() {
-				return 'http://ryan.hoover.ws';
+				return 'http://wordpress.local';
 			}
 		);
 
@@ -80,8 +76,39 @@ class NoticesTest extends \Codeception\TestCase\WPTestCase {
 		$this->notices->do_admin_notices();
 		$result = ob_get_clean();
 
+		$this->testAdminNotice( 'This is a staging or local site. Production features are disabled.' );
+	}
+
+	/**
+	 * Test our staging notice in a WooCommerce site.
+	 */
+	public function testAdminProductionNotice() {
+		// Filter the production URL.
+		add_filter(
+			'safe_staging_production_url',
+			function() {
+				return 'http://wordpress.local';
+			}
+		);
+
+		// Filter that this is a staging site.
+		add_filter( 'safe_staging_is_production', '__return_true' );
+
+		$this->testAdminNotice( 'This is a production site. Any changes will immediately go live.' );
+	}
+
+	/**
+	 * Test if the right admin notice shows given conditions we set up.
+	 *
+	 * @param string $message Message to look for.
+	 */
+	protected function testAdminNotice( $message ) {
+		ob_start();
+		$this->notices->do_admin_notices();
+		$result = ob_get_clean();
+
 		$this->assertContains(
-			'Safe Staging has identified this as a non-production site and has disabled production features.',
+			$message,
 			$result
 		);
 	}
@@ -94,11 +121,11 @@ class NoticesTest extends \Codeception\TestCase\WPTestCase {
 		add_filter( 'safe_staging_is_production', '__return_false' );
 
 		ob_start();
-		$this->notices->do_admin_notices();
+		$this->notices->do_checkout_notice();
 		$result = ob_get_clean();
 
 		$this->assertContains(
-			'Configure Safe Staging to protect your staging sites from accidental emails and orders.',
+			'This is a staging site. Please make all purchases at the',
 			$result
 		);
 	}

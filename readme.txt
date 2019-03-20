@@ -111,11 +111,28 @@ add_filter(
 )
 </code>
 
-== Changelog ==
-
-= 0.2.4 =
-* Clarifies readme code examples
 
 == Upgrade notice ==
 
 None needed.
+
+== Changelog ==
+
+= 0.3 =
+
+* Improve admin notifications
+* Clarifies readme code examples
+* Adds wpunit tests
+
+= 0.2.3 =
+
+* Adds support for CI / CD code management
+
+= 0.2.1 =
+
+* Bumps compatibility to 5.1.
+* Adds uninstall file.
+
+= 0.2 =
+
+* Adds noindex tag to the staging site.

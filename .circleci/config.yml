@@ -124,11 +124,7 @@ jobs:
 
 workflows:
     version: 2
-    test:
-        jobs:
-            - test
-
-    deploy:
+    test-deploy:
         jobs:
             - test
             - build_deploy:
@@ -137,10 +133,6 @@ workflows:
                     - test
                 filters:
                     tags:
-                        ignore:
-                            - /.*pre.*/
-                            - /.*dev.*/
-                            - /.*alpha.*/
-                            - /.*beta.*/
+                        only: /[\d\.]*/
                     branches:
                         ignore: /.*/

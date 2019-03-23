@@ -118,6 +118,11 @@ None needed.
 
 == Changelog ==
 
+= 0.3.2 =
+
+* Improves CI / CD
+* Adds wpunit tests
+
 = 0.3 =
 
 * Improve admin notifications
